@@ -2,13 +2,20 @@ import UIKit
 
 class ScrollSynchronizer: NSObject, UIScrollViewDelegate {
 
-  var views = [UIScrollView]()
+  var views = Set<UIScrollView>()
 
   init(views: [UIScrollView] = [UIScrollView]()) {
-    self.views = views
+    self.views = Set(views)
     super.init()
     views.forEach{$0.delegate = self}
   }
+
+  func add(view: UIScrollView) {
+    view.delegate = self
+    views.insert(view)
+  }
+
+  var previousContentOffset = CGPoint.zero
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     let contentOffset = scrollView.contentOffset
