@@ -1,6 +1,6 @@
 import UIKit
 
-public class TimelineContainer: UIScrollView, ReusableView {
+public class TimelineContainer: UIScrollView {
   
   public let timeline: TimelineView
   
