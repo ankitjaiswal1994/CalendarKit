@@ -93,15 +93,11 @@ public class TimelinePagerView: UIView {
   func configureTimelineController(date: Date) -> TimelineContainerController {
     let controller = TimelineContainerController()
     updateStyleOfTimelineContainer(controller: controller)
-
     let timeline = controller.timeline
     timeline.delegate = self
     timeline.eventViewDelegate = self
     timeline.date = date.dateOnly()
     updateTimeline(timeline)
-    // A hack ;)
-    controller.container.layoutSubviews()
-    timelineSynchronizer.add(view: controller.container)
     return controller
   }
 
@@ -154,13 +150,19 @@ extension TimelinePagerView: UIPageViewControllerDataSource {
   public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
     guard let containerController = viewController as? TimelineContainerController  else {return nil}
     let previousDate = containerController.timeline.date.add(TimeChunk.dateComponents(days: -1))
-    return configureTimelineController(date: previousDate)
+    let vc = configureTimelineController(date: previousDate)
+    let offset = (pageViewController.viewControllers?.first as? TimelineContainerController)?.container.contentOffset
+    vc.pendingContentOffset = offset
+    return vc
   }
 
   public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
     guard let containerController = viewController as? TimelineContainerController  else {return nil}
     let nextDate = containerController.timeline.date.add(TimeChunk.dateComponents(days: 1))
-    return configureTimelineController(date: nextDate)
+    let vc = configureTimelineController(date: nextDate)
+    let offset = (pageViewController.viewControllers?.first as? TimelineContainerController)?.container.contentOffset
+    vc.pendingContentOffset = offset
+    return vc
   }
 }
 
