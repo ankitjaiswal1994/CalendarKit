@@ -26,8 +26,6 @@ public class TimelinePagerView: UIView {
   var pagingViewController = UIPageViewController(transitionStyle: .scroll,
                                                   navigationOrientation: .horizontal,
                                                   options: nil)
-  var timelineSynchronizer = ScrollSynchronizer()
-
   var style = TimelineStyle()
 
   weak var state: DayViewState? {
